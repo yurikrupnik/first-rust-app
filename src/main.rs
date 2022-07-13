@@ -19,13 +19,13 @@ use serde::Deserialize;
 const DB_NAME: &str = "test";
 const COLL_NAME: &str = "users";
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub enum ResponseType {
     Token,
     Code,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Deserialize)]
 pub struct AuthRequest {
     id: u64,
     response_type: ResponseType,
