@@ -8,10 +8,10 @@ pub struct User {
     pub password: String,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
-pub struct List {
-    list: Vec<User>,
-}
+// #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+// pub struct List {
+//     list: Vec<User>,
+// }
 //
 // pub struct CreateUserDto {
 //     pub email: String,
