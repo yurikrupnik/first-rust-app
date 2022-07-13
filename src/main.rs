@@ -11,7 +11,7 @@ mod test;
 use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder, Scope};
 // use std::thread::scope;
 use actix_web::body::None;
-use actix_web::web::scope;
+use actix_web::web::{scope, Json};
 use model::{List, User};
 use mongodb::{bson::doc, options::IndexOptions, Client, Collection, Cursor, IndexModel};
 use serde::Deserialize;
@@ -76,11 +76,20 @@ async fn stream() -> HttpResponse {
 
 /// Gets the users array.
 #[get("/users")]
-async fn get_users(req: HttpRequest, client: web::Data<Client>) -> impl Responder {
+async fn get_users(req: HttpRequest) -> impl Responder {
+    // async fn get_users(req: HttpRequest) {
     println!("uri {}", req.uri());
+    // println!("body {}", body.);
+
+    let isEmpty = req.match_info().is_empty();
+    if isEmpty {
+        println!("isEmpty true")
+    } else {
+        println!("isEmpty false")
+    }
 
     let headers = req.headers();
-
+    // app_data.and_then()
     for header in headers {
         println!("Header is 0 {}", header.0);
         // println!("Header is 1 {}", header.1);
@@ -104,9 +113,20 @@ async fn get_users(req: HttpRequest, client: web::Data<Client>) -> impl Responde
     //     Ok(None) => HttpResponse::NotFound().body(format!("No users found")),
     //     Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     // }
+    let mut my_vector: Vec<User> = Vec::new();
+    my_vector.push(User {
+        email: "a@c.com".to_string(),
+        age: 12,
+        name: "Ars".to_string(),
+        password: "123456".to_string(),
+    });
+
+    println!("first items name: {}", my_vector[0].name);
+    // let my_vector: Vec<User> = vec![];
+    // return Json(my_vector);
     HttpResponse::Ok()
         .content_type("application/json")
-        .json("hello")
+        .json(my_vector)
 }
 
 /// Adds a new user to the "users" collection in the database.
@@ -116,7 +136,7 @@ async fn add_user(client: web::Data<Client>, form: web::Form<User>) -> HttpRespo
     println!("email {}", form.email);
     let result = collection.insert_one(form.into_inner(), None).await;
     match result {
-        Ok(_) => HttpResponse::Ok().body("user added"),
+        Ok(_) => HttpResponse::Ok().json("user added"),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }
