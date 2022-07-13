@@ -12,7 +12,7 @@ use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Resp
 // use std::thread::scope;
 use actix_web::body::None;
 use actix_web::web::{scope, Json};
-use model::{List, User};
+use model::User;
 use mongodb::{bson::doc, options::IndexOptions, Client, Collection, Cursor, IndexModel};
 use serde::Deserialize;
 
