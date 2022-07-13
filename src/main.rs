@@ -8,11 +8,11 @@ mod model;
 #[cfg(test)]
 mod test;
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Scope};
+use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder, Scope};
 // use std::thread::scope;
 use actix_web::body::None;
 use actix_web::web::scope;
-use model::User;
+use model::{List, User};
 use mongodb::{bson::doc, options::IndexOptions, Client, Collection, Cursor, IndexModel};
 use serde::Deserialize;
 
@@ -35,6 +35,7 @@ pub struct AuthRequest {
 #[get("/users/{id}")]
 async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpResponse {
     let search_id = id.into_inner();
+    println!("id is {search_id}");
     let collection: Collection<User> = client.database(DB_NAME).collection(COLL_NAME);
     match collection
         .find_one(doc! { "_id": &search_id }, None)
@@ -48,25 +49,6 @@ async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpRespo
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }
-
-// #[post("/echo")]
-// async fn echo(req_body: String) -> impl Responder {
-//     HttpResponse::Ok().body(req_body)
-// }
-/// Creates an index on the "username" field to force the values to be unique.
-// async fn create_username_index(client: &Client) {
-//     let options = IndexOptions::builder().unique(true).build();
-//     let model = IndexModel::builder()
-//         .keys(doc! { "username": 1 })
-//         .options(options)
-//         .build();
-//     client
-//         .database("users")
-//         .collection::<User>("users")
-//         .create_index(model, None)
-//         .await
-//         .expect("creating an index should succeed");
-// }
 
 async fn mongo_connect() -> Client {
     let uri = std::env::var("MONGODB_URI")
@@ -93,28 +75,39 @@ async fn stream() -> HttpResponse {
 }
 
 /// Gets the users array.
-// #[get("/users")]
-// async fn get_users(client: web::Data<Client>, username: web::Path<String>) -> HttpResponse {
-//     // async fn get_users() -> HttpResponse {
-//     let clone = client.clone();
-//     // HttpResponse::Ok().json("val")
-//     // println!("my clone name {}", clone.database("test"))
-//     // HttpResponse::Ok()
-//     //     .content_type("application/json")
-//     //     .json("hello")
-//     let username = username.into_inner();
-//     let collection: Collection<User> = client.database(DB_NAME).collection(COLL_NAME);
-//     match collection
-//         // .find_one(doc! { "username": &username }, None)
-//         .find(doc! {}, None)
-//         .await
-//     {
-//         Ok((users)) => HttpResponse::Ok().json(users),
-//         // Ok(Some(users)) => HttpResponse::Ok().json(users),
-//         Ok(None) => HttpResponse::NotFound().body(format!("No users found")),
-//         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-//     }
-// }
+#[get("/users")]
+async fn get_users(req: HttpRequest, client: web::Data<Client>) -> impl Responder {
+    println!("uri {}", req.uri());
+
+    let headers = req.headers();
+
+    for header in headers {
+        println!("Header is 0 {}", header.0);
+        // println!("Header is 1 {}", header.1);
+    }
+    // println!("params email {}", params.email);
+    // async fn get_users() -> HttpResponse {
+    // let clone = client.clone();
+    // HttpResponse::Ok().json("val")
+    // println!("my clone name {}", clone.database("test"))
+    // let username = username.into_inner();
+
+    // let collection: Collection<User> = client.database(DB_NAME).collection(COLL_NAME);
+    // match collection
+    //     // .find_one(doc! { "username": &username }, None)
+    //     .find(doc! {}, None)
+    //     .await
+    // {
+    //     // Ok(Some(user)) => HttpResponse::Ok().json(user),
+    //     Ok((users)) => HttpResponse::Ok().json(users),
+    //     // Ok(Some(users)) => HttpResponse::Ok().json(users),
+    //     Ok(None) => HttpResponse::NotFound().body(format!("No users found")),
+    //     Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
+    // }
+    HttpResponse::Ok()
+        .content_type("application/json")
+        .json("hello")
+}
 
 /// Adds a new user to the "users" collection in the database.
 #[post("/users")]
@@ -133,7 +126,7 @@ async fn add_user(client: web::Data<Client>, form: web::Form<User>) -> HttpRespo
 async fn main() -> std::io::Result<()> {
     // let uri = std::env::var("MONGODB_URI").unwrap_or_else(|_| "mongodb://localhost/first-rust-app".into());
     // let client = Client::with_uri_str(uri).await.expect("failed to connect");
-    let client = mongo_connect();
+    mongo_connect();
     // create_username_index(&client).await;
 
     HttpServer::new(move || {
@@ -141,6 +134,7 @@ async fn main() -> std::io::Result<()> {
             scope("/api")
                 .service(stream)
                 // .service(get_users)
+                .service(get_users)
                 .service(get_user)
                 .service(add_user)
                 .service(status), // .service(postUser)
