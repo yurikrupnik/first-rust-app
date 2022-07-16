@@ -10,4 +10,4 @@ description = "My app"
 actix-web = { version = "4.1.0", features = ["default"] }
 mongodb = "2.2.2"
 serde = "1.0.139"
-tokio = { version = "1.19.2", features = ["full"] }
+tokio = { version = "1.20.0", features = ["full"] }
