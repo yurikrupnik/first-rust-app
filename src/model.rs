@@ -1,11 +1,15 @@
+use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub struct User {
+    // pub _id: ObjectId,
+    pub _id: String,
     pub name: String,
+    pub role: String,
     pub age: i32,
     pub email: String,
-    pub password: String,
+    // pub password: String,
 }
 
 // #[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]

@@ -1,0 +1,7 @@
+Dockerfile
+.dockerignore
+.env
+.env.example
+.idea
+.gitignore
+renovate.json

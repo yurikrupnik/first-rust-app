@@ -1,23 +1,29 @@
-#FROM rust:1.62 as builder
-#WORKDIR /usr/src/myapp
-#COPY . .
-#RUN cargo build --release
-#RUN USER=root cargo new --bin holodeck
-# copy over your manifests
-#COPY ./Cargo.lock ./Cargo.lock
-#COPY ./Cargo.toml ./Cargo.toml
-# this build step will cache your dependencies
-#RUN cargo install --path .
-#RUN rm src/*.rs
-#/RUN cargo install --path .
-#RUN #cargo install --path .
+FROM rust:1.62 AS planner
+WORKDIR /app
+RUN cargo install cargo-chef
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
 
-#FROM debian:buster-slim
+FROM rust:1.62 AS cacher
+WORKDIR /app
+RUN cargo install cargo-chef
+COPY --from=planner /app/recipe.json recipe.json
+RUN cargo chef cook --release --recipe-path recipe.json
+
+FROM rust:1.62 AS builder
+WORKDIR /app
+COPY . /app
+COPY --from=cacher /app/target target
+COPY --from=cacher /usr/local/cargo /usr/local/cargo
+RUN cargo build --release
+
 FROM alpine:latest
 WORKDIR /
-RUN #apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
+#RUN #apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
 #COPY --from=builder /usr/src/myapp/target/release/first-rust-app ./
-COPY  ./target/release/first-rust-app ./app
+COPY --from=builder ./app/target/release/first-rust-app /usr/local/bin/first-rust-app
+#COPY ./target/release/first-rust-app /usr/local/bin/first-rust-app
 EXPOSE 8080
 #ENTRYPOINT ["/usr/bin/first-rust-app"]
-#ENTRYPOINT ["/app"]
+#ENTRYPOINT ["/first-rust-app"]
+ENTRYPOINT ["/usr/local/bin/first-rust-app"]

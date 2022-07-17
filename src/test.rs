@@ -9,7 +9,9 @@ use super::*;
 #[actix_web::test]
 #[ignore = "requires MongoDB instance running"]
 async fn test() {
-    let uri = std::env::var("MONGODB_URI").unwrap_or_else(|_| "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into());
+    let uri = std::env::var("MONGODB_URI").unwrap_or_else(|_| {
+        "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into()
+    });
 
     let client = Client::with_uri_str(uri).await.expect("failed to connect");
     println!("client data here");
@@ -23,18 +25,20 @@ async fn test() {
         .expect("drop collection should succeed");
 
     let app = init_service(
-        App::new()
-            .app_data(web::Data::new(client))
-            .service(add_user)
-            .service(get_user),
+        App::new().app_data(web::Data::new(client)), // .service(add_user)
+                                                     // .service(get_user),
     )
-        .await;
+    .await;
 
     let user = User {
-        first_name: "Jane".into(),
-        last_name: "Doe".into(),
-        username: "janedoe".into(),
+        // first_name: "Jane".into(),
+        // last_name: "Doe".into(),
+        // username: "janedoe".into(),
+        name: "Aros".into(),
         email: "example@example.com".into(),
+        age: 39,
+        role: "admin".into(),
+        // password: "123456".into(),
     };
 
     let req = TestRequest::post()
