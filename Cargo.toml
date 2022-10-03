@@ -9,7 +9,7 @@ description = "My app"
 
 [dependencies]
 actix-web = { version = "4.2.1", features = ["default"] }
-mongodb = "2.2.2"
+mongodb = "2.3.1"
 serde = "1.0.139"
 ts-rs = "6.2"
 tokio = { version = "1.21.2", features = ["full"] }
