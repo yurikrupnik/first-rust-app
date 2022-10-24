@@ -26,7 +26,7 @@ const COLL_NAME: &str = "users";
 #[get("/users/{id}")]
 async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpResponse {
     let search_id = id.into_inner();
-    println!("id is {}", search_id);
+    println!("id is test here {}", search_id);
     let users: Collection<User> = client.database(DB_NAME).collection(COLL_NAME);
     let data = users.find_one(doc! { "_id": search_id }, None).await;
     if data.is_ok() {
