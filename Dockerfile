@@ -3,19 +3,19 @@
 #COPY . .
 #RUN cargo install --path .
 
-FROM rust:1.65 AS planner
+FROM rust:1.66 AS planner
 WORKDIR /app
 RUN cargo install cargo-chef
 COPY .. .
 RUN cargo chef prepare --recipe-path recipe.json
 
-FROM rust:1.65 AS cacher
+FROM rust:1.66 AS cacher
 WORKDIR /app
 RUN cargo install cargo-chef
 COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 
-FROM rust:1.65 AS builder
+FROM rust:1.66 AS builder
 WORKDIR /app
 COPY .. /app
 COPY --from=cacher /app/target target
