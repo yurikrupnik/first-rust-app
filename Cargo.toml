@@ -12,7 +12,7 @@ actix-web = { version = "4.2.1", features = ["default"] }
 mongodb = "2.3.1"
 serde = "1.0.147"
 ts-rs = "6.2"
-tokio = { version = "1.22.0", features = ["full"] }
+tokio = { version = "1.23.0", features = ["full"] }
 dotenv = "0.15.0"
 
 [package.metadata.wharf.builder]
