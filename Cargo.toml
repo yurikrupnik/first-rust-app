@@ -8,7 +8,7 @@ description = "My app"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = { version = "4.3.0", features = ["default"] }
+actix-web = { version = "4.3.1", features = ["default"] }
 mongodb = "2.4.0"
 serde = "1.0.158"
 ts-rs = "6.2"
