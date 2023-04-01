@@ -24,12 +24,12 @@ RUN cargo build --release
 #ENTRYPOINT ["/app/target/release/first-rust-app"]
 
 #FROM base AS final
-FROM debian:buster-slim
-#FROM alpine:latest AS final
+# FROM debian:buster-slim
+FROM alpine:latest AS final
 #FROM rust:1.62 AS final
 ##FROM scratch AS final
 WORKDIR /
-RUN apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y extra-runtime-dependencies && rm -rf /var/lib/apt/lists/*
 ##COPY --from=builder /usr/src/myapp/target/release/first-rust-app ./
 ##COPY --from=builder ./app/target/release/first-rust-app /usr/local/bin/first-rust-app
 ##COPY ../target/aarch64-apple-darwin/release/first-rust-app ./first-rust-app
