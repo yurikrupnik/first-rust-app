@@ -54,7 +54,8 @@ async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpRespo
 async fn mongo_connect() -> Client {
     let uri = std::env::var("MONGODB_URI")
         // .and_then(|_| "mongodb://localhost/first-rust-app".into())
-        .unwrap_or_else(|_| "mongodb://localhost/first-rust-app".into());
+        .unwrap_or_else(|_|  "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into());
+    
     // uri.chars();
     println!("uri is {}", uri);
     let client = Client::with_uri_str(uri).await.expect("failed to connect");
@@ -70,7 +71,7 @@ async fn greet(name: web::Path<String>) -> impl Responder {
 async fn stream() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("application/json")
-        .json("Helli there")
+        .json("Hello there")
 }
 
 /// Gets the users array.

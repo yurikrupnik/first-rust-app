@@ -56,11 +56,11 @@ jobs:
       - id: 'auth'
         uses: 'google-github-actions/auth@v0'
         with:
-          workload_identity_provider: 'projects/361115404307/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'container-builder-sa@mussia33.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v0'
       - run: |-
           gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
       - name: Build Container
-        run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app -t europe-central2-docker.pkg.dev/mussia33/container-repository/first-rust-app
+        run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app -teurope-central2-docker.pkg.dev/mussia-infra/container-repository/first-rust-app
