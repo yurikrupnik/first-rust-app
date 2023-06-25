@@ -15,19 +15,24 @@ jobs:
       - checkout
       - run: ls
 #
+  lint:
+    docker:
+      - image: cimg/rust:1.70.0
+    steps:
+      - checkout
+      - run: cargo clippy
   test:
     docker:
       - image: cimg/rust:1.70.0
     steps:
       - checkout
-      - run: cargo build
       - run: cargo test
   build:
     docker:
       - image: cimg/rust:1.70.0
     steps:
       - checkout
-      - run: cargo build
+      - run: cargo build --release
 workflows:
   build:
     jobs:
