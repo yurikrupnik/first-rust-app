@@ -12,6 +12,7 @@ jobs:
       - image: denoland/deno:1.10.3
       - image: cimg/rust:1.70.0
       - image: cimg/go:1.17
+      - image: cimg/base:2023.04
     steps:
       - checkout
       - setup_remote_docker:
