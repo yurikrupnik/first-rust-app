@@ -1,0 +1,50 @@
+version: 2.1
+orbs:
+#  nx: nrwl/nx@1.5.1
+#  go: circleci/go@1.7.3
+#  pnpm-release-management: rkesters/pnpm-release-management@0.0.1
+#  slack: circleci/slack@4.12.5
+#  aws-cli: circleci/aws-cli@4.0.0
+jobs:
+  main:
+    docker:
+      - image: cimg/node:lts-browsers
+#      - image: denoland/deno:1.10.3
+      - image: cimg/rust:1.70.0
+      - image: cimg/go:1.17
+      - image: cimg/base:2023.04
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.18
+          docker_layer_caching: true
+      - run: docker images
+      - run: docker ps
+      - run: ls
+#      - run: docker build --target final . -t yurikrupnik/first-rust-app
+#
+  lint:
+    docker:
+      - image: cimg/rust:1.70.0
+    steps:
+      - checkout
+      - run: cargo clippy
+  test:
+    docker:
+      - image: cimg/rust:1.70.0
+    steps:
+      - checkout
+      - run: cargo test
+  build:
+    docker:
+      - image: cimg/rust:1.70.0
+    steps:
+      - checkout
+      - run: cargo build --release
+workflows:
+  build:
+    jobs:
+      - main
+      - build
+      - test
+      - lint

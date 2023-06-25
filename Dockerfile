@@ -35,8 +35,8 @@ WORKDIR /
 ##COPY --from=builder /usr/src/myapp/target/release/first-rust-app ./
 ##COPY --from=builder ./app/target/release/first-rust-app /usr/local/bin/first-rust-app
 ##COPY ../target/aarch64-apple-darwin/release/first-rust-app ./first-rust-app
-COPY --from=builder ./app/target/release/first-rust-app ./bin/first-rust-app
+COPY --from=builder ./app/target/release/first-rust-app ./bin/custom-app
 EXPOSE 8080
 ##ENTRYPOINT ["/usr/bin/first-rust-app"]
 # CMD ["/first-rust-app"]
-ENTRYPOINT ["/first-rust-app"]
+ENTRYPOINT ["/custom-app"]

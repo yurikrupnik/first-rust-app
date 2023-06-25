@@ -38,6 +38,7 @@ async fn test() {
         email: "example@example.com".into(),
         age: 39,
         role: "admin".into(),
+        // has_car: true
         // password: "123456".into(),
     };
 

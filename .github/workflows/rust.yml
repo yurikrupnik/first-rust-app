@@ -10,18 +10,34 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
-
+  lint:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: rustup toolchain install stable --profile minimal
+      - uses: Swatinem/rust-cache@v2
+      - name: Lint
+        run: cargo clippy
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: rustup toolchain install stable --profile minimal
+      - uses: Swatinem/rust-cache@v2
+      - name: Run tests
+        run: cargo test
+
+  build:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - run: rustup toolchain install stable --profile minimal
     - uses: Swatinem/rust-cache@v2
     - name: Build
-      run: cargo build --verbose
+      run: cargo build --release
     - name: Run tests
-      run: cargo test --verbose
+      run: cargo test
   docker:
     runs-on: ubuntu-latest
     permissions:
@@ -53,14 +69,22 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       - run: gcloud config list
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0'
-      - run: |-
-          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
+#      - id: 'auth'
+#        uses: 'google-github-actions/auth@v0'
+#        with:
+#          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+#          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
+#      - name: 'Set up Cloud SDK'
+#        uses: 'google-github-actions/setup-gcloud@v0'
+#      - run: |-
+#          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
       - name: Build Container
-        run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app -teurope-central2-docker.pkg.dev/mussia-infra/container-repository/first-rust-app
+        run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app
+#      - name: Kaniko build
+#        uses: aevea/action-kaniko@master
+#        with:
+#          image: yurikrupnik/first-rust-app
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+#          cache: true
+#          cache_registry: yurikrupnik/first-rust-app-cache
