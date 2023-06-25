@@ -39,3 +39,4 @@ workflows:
       - main
       - build
       - test
+      - lint
