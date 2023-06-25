@@ -69,14 +69,14 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
       - run: gcloud config list
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v0'
-        with:
-          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0'
-      - run: |-
-          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
+#      - id: 'auth'
+#        uses: 'google-github-actions/auth@v0'
+#        with:
+#          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+#          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
+#      - name: 'Set up Cloud SDK'
+#        uses: 'google-github-actions/setup-gcloud@v0'
+#      - run: |-
+#          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
       - name: Build Container
         run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app
