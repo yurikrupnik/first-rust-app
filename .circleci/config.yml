@@ -11,10 +11,11 @@ jobs:
       - image: cimg/node:lts-browsers
       - image: denoland/deno:1.10.3
       - image: cimg/rust:1.70.0
+      - image: cimg/go:1.17
     steps:
       - checkout
       - setup_remote_docker:
-          version: 20.10.14
+          version: 20.10.18
           docker_layer_caching: true
       - run: docker build --target final . -t yurikrupnik/first-rust-app
       - run: docker images
