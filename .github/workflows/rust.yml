@@ -83,8 +83,8 @@ jobs:
       - name: Kaniko build
         uses: aevea/action-kaniko@master
         with:
-          image: yurikrupnik/fiber-mongo
+          image: yurikrupnik/first-rust-app
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
           cache: true
-          cache_registry: yurikrupnik/cache1
+          cache_registry: yurikrupnik/first-rust-app-cache
