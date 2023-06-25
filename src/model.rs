@@ -11,6 +11,19 @@ pub struct User {
     pub role: String,
     pub age: i32,
     pub email: String,
+    // pub has_car: bool,
+    // pub password: String,
+}
+
+#[derive(Clone, TS, PartialEq, Eq, Deserialize, Serialize)]
+#[ts(export)]
+pub struct Book {
+    // pub _id: String,
+    // pub _id: Option<String>,
+    pub name: String,
+    pub year: i32,
+    pub writer: String,
+    // pub has_car: bool,
     // pub password: String,
 }
 
