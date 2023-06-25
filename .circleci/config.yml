@@ -20,6 +20,7 @@ jobs:
           docker_layer_caching: true
       - run: docker images
       - run: docker ps
+      - run: ls
 #      - run: docker build --target final . -t yurikrupnik/first-rust-app
 #
   lint:
