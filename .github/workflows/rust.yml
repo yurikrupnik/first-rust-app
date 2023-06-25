@@ -78,5 +78,13 @@ jobs:
 #        uses: 'google-github-actions/setup-gcloud@v0'
 #      - run: |-
 #          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
-      - name: Build Container
-        run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app
+#      - name: Build Container
+#        run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app
+      - name: Kaniko build
+        uses: aevea/action-kaniko@master
+        with:
+          image: yurikrupnik/fiber-mongo
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          cache: true
+          cache_registry: yurikrupnik/cache
