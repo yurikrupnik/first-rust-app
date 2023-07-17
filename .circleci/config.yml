@@ -10,7 +10,7 @@ jobs:
     docker:
       - image: cimg/node:lts-browsers
 #      - image: denoland/deno:1.10.3
-      - image: cimg/rust:1.70.0
+      - image: cimg/rust:1.71.0
       - image: cimg/go:1.17
       - image: cimg/base:2023.04
     steps:
@@ -25,19 +25,19 @@ jobs:
 #
   lint:
     docker:
-      - image: cimg/rust:1.70.0
+      - image: cimg/rust:1.71.0
     steps:
       - checkout
       - run: cargo clippy
   test:
     docker:
-      - image: cimg/rust:1.70.0
+      - image: cimg/rust:1.71.0
     steps:
       - checkout
       - run: cargo test
   build:
     docker:
-      - image: cimg/rust:1.70.0
+      - image: cimg/rust:1.71.0
     steps:
       - checkout
       - run: cargo build --release
