@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rust-app
+  labels:
+    app: rust-app
+spec:
+  replicas: 1
+
+  template:
+    metadata:
+      name: rust-app
+      labels:
+        app: rust-app
+    spec:
+      serviceAccountName: rust-app
+      restartPolicy: Always
+      containers:
+        - name: rust-app
+          image: yurikrupnik/first-rust-app
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGO_URI
+              value: "mongodb://host.docker.internal"
+            - name: REDIS_HOST
+              value: "host.docker.internal"
+
+  selector:
+    matchLabels:
+      app: rust-app
