@@ -17,7 +17,8 @@ spec:
       restartPolicy: Always
       containers:
         - name: rust-app
-          image: yurikrupnik/first-rust-app
+          image: yurikrupnik/first-rust-app:latest
+#          image: yurikrupnik/docker-fiber-app:pr-132
           imagePullPolicy: IfNotPresent
           env:
             - name: MONGO_URI

@@ -66,7 +66,8 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-      - run: gcloud config list
+      - run: rustup show
+#      - run: gcloud config list
 #      - id: 'auth'
 #        uses: 'google-github-actions/auth@v0'
 #        with:
@@ -77,43 +78,43 @@ jobs:
 #      - run: |-
 #          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
       - name: Build Container
-        run: docker buildx build --push --target final . -t yurikrupnik/first-rust-app
-  kaniko:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - run: rustup toolchain install stable --profile minimal
-      - uses: Swatinem/rust-cache@v2
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Log into registry
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - uses: docker/metadata-action@v4
-        id: metadata
-        with:
-          images: ghcr.io/${{ github.repository }}
-          #          images: yurikrupnik/${{ github.repository }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-
-      - name: Kaniko build
-        uses: aevea/action-kaniko@master
-        with:
-          image: yurikrupnik/kaniko-first-rust-app
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          cache: true
-          cache_registry: yurikrupnik/first-rust-app-cache
+        run: docker buildx build --platform=linux/amd64 --push --target final . -t yurikrupnik/first-rust-app
+#  kaniko:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: 'read'
+#      id-token: 'write'
+#    steps:
+#      - uses: actions/checkout@v3
+#        with:
+#          fetch-depth: 0
+#      - run: rustup toolchain install stable --profile minimal
+#      - uses: Swatinem/rust-cache@v2
+#      - name: Set up QEMU
+#        uses: docker/setup-qemu-action@v2
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v2
+#      - name: Log into registry
+#        uses: docker/login-action@v2
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+#      - uses: docker/metadata-action@v4
+#        id: metadata
+#        with:
+#          images: ghcr.io/${{ github.repository }}
+#          #          images: yurikrupnik/${{ github.repository }}
+#          tags: |
+#            type=ref,event=branch
+#            type=ref,event=pr
+#            type=semver,pattern={{version}}
+#            type=semver,pattern={{major}}.{{minor}}
+#
+#      - name: Kaniko build
+#        uses: aevea/action-kaniko@master
+#        with:
+#          image: yurikrupnik/kaniko-first-rust-app
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+#          cache: true
+#          cache_registry: yurikrupnik/first-rust-app-cache
