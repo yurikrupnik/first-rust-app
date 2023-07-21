@@ -29,3 +29,71 @@ spec:
   selector:
     matchLabels:
       app: rust-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaniko-first-rust-app
+
+  labels:
+    app: kaniko-first-rust-app
+
+spec:
+  replicas: 1
+
+  template:
+    metadata:
+      name: kaniko-first-rust-app
+
+      labels:
+        app: kaniko-first-rust-app
+
+    spec:
+      serviceAccountName: rust-app
+      restartPolicy: Always
+      containers:
+        - name: rust-app
+          image: yurikrupnik/kaniko-first-rust-app:refs-pull-49-merge
+
+          #          image: yurikrupnik/docker-fiber-app:pr-132
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MONGO_URI
+              value: "mongodb://host.docker.internal"
+            - name: REDIS_HOST
+              value: "host.docker.internal"
+
+  selector:
+    matchLabels:
+      app: kaniko-first-rust-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rust
+
+  labels:
+    app: rust
+
+spec:
+  replicas: 1
+
+  template:
+    metadata:
+      name: rust
+
+      labels:
+        app: rust
+
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: rust
+          image: yurikrupnik/rust_actix_app:pr-172
+
+          #          image: yurikrupnik/docker-fiber-app:pr-132
+          imagePullPolicy: IfNotPresent
+
+  selector:
+    matchLabels:
+      app: rust
