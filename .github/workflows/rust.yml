@@ -75,8 +75,6 @@ jobs:
 #        uses: 'google-github-actions/setup-gcloud@v0'
 #      - run: |-
 #          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
-#      - name: Build Container
-#        run: docker buildx build --platform=linux/amd64 --push --target final . -t yurikrupnik/first-rust-app
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
