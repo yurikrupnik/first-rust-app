@@ -15,15 +15,15 @@ ts-rs = "6.2"
 tokio = { version = "1.27.0", features = ["full"] }
 dotenv = "0.15.0"
 
-[package.metadata.wharf.builder]
-image = "clux/muslrust:stable"
-target = "x86_64-unknown-linux-musl"
-
-[package.metadata.wharf.output]
-image = "scratch"
-workdir = "/"
-entrypoint = ["/usr/local/bin/first-rust-app"]
-
-[package.metadata.wharf.binary]
-name = "first-rust-app"
-description = "/usr/local/bin/first-rust-app"
+#[package.metadata.wharf.builder]
+#image = "clux/muslrust:stable"
+#target = "x86_64-unknown-linux-musl"
+#
+#[package.metadata.wharf.output]
+#image = "scratch"
+#workdir = "/"
+#entrypoint = ["/usr/local/bin/first-rust-app"]
+#
+#[package.metadata.wharf.binary]
+#name = "first-rust-app"
+#description = "/usr/local/bin/first-rust-app"
