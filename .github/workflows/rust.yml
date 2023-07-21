@@ -106,22 +106,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-#      - uses: docker/metadata-action@v4
-#        id: metadata
-#        with:
-#          images: ghcr.io/${{ github.repository }}
-#          #          images: yurikrupnik/${{ github.repository }}
-#          tags: |
-#            type=ref,event=branch
-#            type=ref,event=pr
-#            type=semver,pattern={{version}}
-#            type=semver,pattern={{major}}.{{minor}}
-
       - name: Kaniko build
         uses: aevea/action-kaniko@master
         with:
           image: yurikrupnik/kaniko-first-rust-app
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          cache: true
+#          cache: true
 #          cache_registry: syurikrupnik/kaniko-first-rust-app-cache
