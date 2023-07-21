@@ -88,9 +88,9 @@ jobs:
           tags: yurikrupnik/first-rust-app
   kaniko:
     runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+#    permissions:
+#      contents: 'read'
+#      id-token: 'write'
     steps:
       - uses: actions/checkout@v3
         with:
