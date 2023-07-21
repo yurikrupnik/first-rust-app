@@ -56,16 +56,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - uses: docker/metadata-action@v4
-        id: metadata
-        with:
-          images: ghcr.io/${{ github.repository }}
-#          images: yurikrupnik/${{ github.repository }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+#      - uses: docker/metadata-action@v4
+#        id: metadata
+#        with:
+#          images: ghcr.io/${{ github.repository }}
+##          images: yurikrupnik/${{ github.repository }}
+#          tags: |
+#            type=ref,event=branch
+#            type=ref,event=pr
+#            type=semver,pattern={{version}}
+#            type=semver,pattern={{major}}.{{minor}}
       - run: rustup show
 #      - run: gcloud config list
 #      - id: 'auth'
@@ -77,8 +77,15 @@ jobs:
 #        uses: 'google-github-actions/setup-gcloud@v0'
 #      - run: |-
 #          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
-      - name: Build Container
-        run: docker buildx build --platform=linux/amd64 --push --target final . -t yurikrupnik/first-rust-app
+#      - name: Build Container
+#        run: docker buildx build --platform=linux/amd64 --push --target final . -t yurikrupnik/first-rust-app
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: yurikrupnik/first-rust-app
   kaniko:
     runs-on: ubuntu-latest
     permissions:
@@ -99,16 +106,16 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-      - uses: docker/metadata-action@v4
-        id: metadata
-        with:
-          images: ghcr.io/${{ github.repository }}
-          #          images: yurikrupnik/${{ github.repository }}
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
+#      - uses: docker/metadata-action@v4
+#        id: metadata
+#        with:
+#          images: ghcr.io/${{ github.repository }}
+#          #          images: yurikrupnik/${{ github.repository }}
+#          tags: |
+#            type=ref,event=branch
+#            type=ref,event=pr
+#            type=semver,pattern={{version}}
+#            type=semver,pattern={{major}}.{{minor}}
 
       - name: Kaniko build
         uses: aevea/action-kaniko@master

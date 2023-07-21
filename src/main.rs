@@ -3,7 +3,7 @@ mod status;
 #[cfg(test)]
 mod test;
 
-use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder, Scope};
+use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use actix_web::web::{scope};
 use model::User;
 use mongodb::{bson::doc, Client, Collection};
@@ -64,7 +64,7 @@ async fn stream() -> HttpResponse {
 
 /// Adds a new user to the "users" collection in the database.
 #[post("/users")]
-async fn add_user(req: HttpRequest, client: web::Data<Client>) -> HttpResponse {
+async fn add_user(_req: HttpRequest, client: web::Data<Client>) -> HttpResponse {
     let collection = client.database(DB_NAME).collection(COLL_NAME);
     // println!("email {}", form.email);
     // println!("body {}", body.email);
