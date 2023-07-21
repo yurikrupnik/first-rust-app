@@ -1,4 +1,4 @@
-# Version 1 - 12 min with kaniko, 6 min with docker
+# Version 1 - 12 min with kaniko, 6 min with docker = 90MB
 #FROM rust:1.71-slim AS planner
 #WORKDIR /app
 #RUN cargo install cargo-chef
@@ -25,7 +25,7 @@
 #EXPOSE ${PORT}
 #ENTRYPOINT ["/bin/app"]
 
-# Version 2 - scratch base image, 6 min with kaniko and docker
+# Version 2 - scratch base image, 6 min with kaniko and docker = 21MB
 FROM messense/rust-musl-cross:x86_64-musl AS builder
 WORKDIR /app
 COPY . .
