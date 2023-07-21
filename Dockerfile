@@ -1,3 +1,4 @@
+# Version 1 - 12 min with kaniko, 6 min with docker
 #FROM rust:1.71-slim AS planner
 #WORKDIR /app
 #RUN cargo install cargo-chef
@@ -24,12 +25,12 @@
 #EXPOSE ${PORT}
 #ENTRYPOINT ["/bin/app"]
 
-FROM messense/rust-musl-cross:x86_64-musl as builder
+FROM messense/rust-musl-cross:x86_64-musl AS builder
 WORKDIR /app
 COPY . .
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
-FROM scratch
+FROM scratch AS final
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/first-rust-app /app
 ENV PORT=8080
 EXPOSE ${PORT}
