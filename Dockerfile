@@ -25,6 +25,7 @@
 #EXPOSE ${PORT}
 #ENTRYPOINT ["/bin/app"]
 
+# Version 2 - scratch base image, 6 min with kaniko and docker
 FROM messense/rust-musl-cross:x86_64-musl AS builder
 WORKDIR /app
 COPY . .
