@@ -34,6 +34,8 @@ jobs:
   build:
     docker:
       - image: cimg/rust:1.71.0
+    parallelism: 3
+    resource_class: large
     steps:
       - checkout
       - restore_cache:
@@ -47,6 +49,8 @@ jobs:
   container:
     docker:
       - image: cimg/base:stable
+    parallelism: 3
+    resource_class: large
     steps:
       - setup_remote_docker:
           docker_layer_caching: true
