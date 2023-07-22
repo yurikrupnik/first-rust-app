@@ -54,34 +54,22 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-#      - uses: docker/metadata-action@v4
-#        id: metadata
-#        with:
-#          images: ghcr.io/${{ github.repository }}
-##          images: yurikrupnik/${{ github.repository }}
-#          tags: |
-#            type=ref,event=branch
-#            type=ref,event=pr
-#            type=semver,pattern={{version}}
-#            type=semver,pattern={{major}}.{{minor}}
-      - run: rustup show
-#      - run: gcloud config list
-#      - id: 'auth'
-#        uses: 'google-github-actions/auth@v0'
-#        with:
-#          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-#          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
-#      - name: 'Set up Cloud SDK'
-#        uses: 'google-github-actions/setup-gcloud@v0'
-#      - run: |-
-#          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v0'
+      - run: |-
+          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: .
 #          platforms: linux/amd64
           push: true
-          tags: yurikrupnik/first-rust-app
+          tags: europe-central2-docker.pkg.dev/mussia-infra/container-repository/first-rust-app
   kaniko:
     runs-on: ubuntu-latest
 #    permissions:
