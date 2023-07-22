@@ -53,7 +53,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: rust-app
-          image: yurikrupnik/kaniko-first-rust-app:refs-pull-49-merge
+          image: yurikrupnik/kaniko-first-rust-app:refs-pull-54-merge
 
           #          image: yurikrupnik/docker-fiber-app:pr-132
           imagePullPolicy: IfNotPresent
@@ -89,7 +89,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: rust
-          image: yurikrupnik/rust_actix_app:pr-172
+          image: yurikrupnik/ci-first-rust-app:latest
 
           #          image: yurikrupnik/docker-fiber-app:pr-132
           imagePullPolicy: IfNotPresent
