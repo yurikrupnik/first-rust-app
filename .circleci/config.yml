@@ -51,7 +51,8 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - checkout
-      - run: docker buildx build . -t yurikrupnik/kaniko-first-rust-app
+      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run: docker buildx build . -t yurikrupnik/ci-kaniko-first-rust-app --push
 workflows:
   build:
     jobs:
