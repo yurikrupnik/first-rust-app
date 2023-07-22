@@ -64,7 +64,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: europe-central2-docker.pkg.dev/mussia-infra/container-repository/first-rust-app
+#          tags: europe-central2-docker.pkg.dev/mussia-infra/container-repository/first-rust-app
+          tags: yurikrupnik/first-rust-app
   kaniko:
     runs-on: ubuntu-latest
     permissions:
