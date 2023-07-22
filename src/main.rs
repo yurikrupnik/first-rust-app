@@ -22,9 +22,6 @@ async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpRespo
     if data.is_ok() {
         println!("all good")
     }
-    // data.and_then(fn ds(d: any) {
-    //     println!(d)
-    // });
     HttpResponse::Ok()
         .content_type("application/json")
         .json("user added")
@@ -102,6 +99,7 @@ async fn main() -> std::io::Result<()> {
                 .service(stream)
                 .service(get_user)
                 .service(status::status)
+                .service(greet)
                 .service(add_user), // .service(status), // .service(postUser)
         )
     })
