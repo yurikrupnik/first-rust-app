@@ -7,7 +7,7 @@ use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Resp
 use actix_web::web::{scope};
 use model::User;
 use mongodb::{bson::doc, Client, Collection};
-use dotenv::{dotenv, Error};
+use dotenv::{dotenv};
 
 const DB_NAME: &str = "test";
 const COLL_NAME: &str = "users";
