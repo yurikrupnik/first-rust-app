@@ -32,11 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-#    - name: Cache Rust dependencies
-#      uses: actions/cache@v2
-#      with:
-#        path: ${{ env.HOME }}/.cargo
-#        key: ${{ runner.os }}-rust-${{ hashFiles('**/Cargo.lock') }}
     - run: rustup toolchain install stable --profile minimal
     - uses: Swatinem/rust-cache@v2
     - name: Build
