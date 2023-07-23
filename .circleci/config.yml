@@ -1,50 +1,62 @@
+# todo check speeds
 version: 2.1
-orbs:
-#  nx: nrwl/nx@1.5.1
-#  go: circleci/go@1.7.3
-#  pnpm-release-management: rkesters/pnpm-release-management@0.0.1
-#  slack: circleci/slack@4.12.5
-#  aws-cli: circleci/aws-cli@4.0.0
+#orbs:
+#  rust: circleci/rust@1.6.0
+caches:
+  cargo: ~/.cargo
 jobs:
-  main:
-    docker:
-      - image: cimg/node:lts-browsers
-#      - image: denoland/deno:1.10.3
-      - image: cimg/rust:1.71.0
-      - image: cimg/go:1.17
-      - image: cimg/base:2023.04
-    steps:
-      - checkout
-      - setup_remote_docker:
-          version: 20.10.18
-          docker_layer_caching: true
-      - run: docker images
-      - run: docker ps
-      - run: ls
-#      - run: docker build --target final . -t yurikrupnik/first-rust-app
-#
   lint:
     docker:
       - image: cimg/rust:1.71.0
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - cargo-{{ .Branch }}-{{ checksum "Cargo.lock" }}
       - run: cargo clippy
+      - save_cache:
+          key: cargo-{{ .Branch }}-{{ checksum "Cargo.lock" }}
+          paths:
+            - ~/.cargo
   test:
     docker:
       - image: cimg/rust:1.71.0
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - cargo-{{ .Branch }}-{{ checksum "Cargo.lock" }}
       - run: cargo test
+      - save_cache:
+          key: cargo-{{ .Branch }}-{{ checksum "Cargo.lock" }}
+          paths:
+            - ~/.cargo
   build:
     docker:
       - image: cimg/rust:1.71.0
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            - cargo-{{ .Branch }}-{{ checksum "Cargo.lock" }}
       - run: cargo build --release
+      - save_cache:
+          key: cargo-{{ .Branch }}-{{ checksum "Cargo.lock" }}
+          paths:
+            - ~/.cargo
+  container:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - checkout
+      - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - run: docker buildx build . -t yurikrupnik/ci-first-rust-app --push
 workflows:
   build:
     jobs:
-      - main
       - build
       - test
       - lint
+      - container

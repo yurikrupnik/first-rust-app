@@ -7,7 +7,7 @@ use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Resp
 use actix_web::web::{scope};
 use model::User;
 use mongodb::{bson::doc, Client, Collection};
-use dotenv::dotenv;
+use dotenv::{dotenv};
 
 const DB_NAME: &str = "test";
 const COLL_NAME: &str = "users";
@@ -43,8 +43,7 @@ async fn mongo_connect() -> Client {
         .unwrap_or_else(|_|  "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into());
     
     println!("uri is {}", uri);
-    let client = Client::with_uri_str(uri).await.expect("failed to connect");
-    client
+    Client::with_uri_str(uri).await.expect("failed to connect")
 }
 
 #[get("/hello/{name}")]

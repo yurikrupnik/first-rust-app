@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
-#[derive(Clone, TS, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Clone, TS, PartialEq, Eq, Deserialize, Serialize, Debug)]
 #[ts(export)]
 pub struct User {
     pub name: String,
@@ -10,7 +10,7 @@ pub struct User {
     pub email: String,
 }
 
-#[derive(Clone, TS, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Clone, TS, PartialEq, Eq, Deserialize, Serialize, Debug)]
 #[ts(export)]
 pub struct Book {
     pub name: String,
