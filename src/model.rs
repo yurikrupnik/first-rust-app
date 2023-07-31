@@ -8,6 +8,10 @@ pub struct User {
     pub role: String,
     pub age: i32,
     pub email: String,
+    // pub provider: String,
+    // #[serde(rename = "tenantId")]
+    // pub tenant_id: String,
+    // pub password: String,
 }
 
 #[derive(Clone, TS, PartialEq, Eq, Deserialize, Serialize, Debug)]

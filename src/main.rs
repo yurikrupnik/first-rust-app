@@ -9,7 +9,7 @@ use model::User;
 use mongodb::{bson::doc, Client, Collection};
 use dotenv::{dotenv};
 
-const DB_NAME: &str = "test";
+const DB_NAME: &str = "mussia33";
 const COLL_NAME: &str = "users";
 
 /// Gets the user with the supplied username.
@@ -39,9 +39,9 @@ async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpRespo
 }
 
 async fn mongo_connect() -> Client {
-    let uri = std::env::var("MONGODB_URI")
+    let uri = std::env::var("MONGO_URI")
         .unwrap_or_else(|_|  "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into());
-    
+
     println!("uri is {}", uri);
     Client::with_uri_str(uri).await.expect("failed to connect")
 }
