@@ -5,7 +5,7 @@ edition = "2021"
 description = "My app"
 
 [dependencies]
-actix-web = { version = "4.3.1", features = ["default"] }
+actix-web = { version = "4.4.0", features = ["default"] }
 mongodb = "2.6.0"
 serde = "1.0.180"
 ts-rs = "6.2"
