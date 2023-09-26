@@ -60,7 +60,7 @@ jobs:
       - run: |-
           gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
       - name: Log into registry
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
