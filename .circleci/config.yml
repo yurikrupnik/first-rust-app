@@ -7,7 +7,7 @@ caches:
 jobs:
   lint:
     docker:
-      - image: cimg/rust:1.73.0
+      - image: cimg/rust:1.74.0
     steps:
       - checkout
       - restore_cache:
@@ -20,7 +20,7 @@ jobs:
             - ~/.cargo
   test:
     docker:
-      - image: cimg/rust:1.73.0
+      - image: cimg/rust:1.74.0
     steps:
       - checkout
       - restore_cache:
@@ -33,7 +33,7 @@ jobs:
             - ~/.cargo
   build:
     docker:
-      - image: cimg/rust:1.73.0
+      - image: cimg/rust:1.74.0
     steps:
       - checkout
       - restore_cache:
