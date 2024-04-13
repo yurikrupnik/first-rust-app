@@ -11,7 +11,7 @@
 
 FROM messense/rust-musl-cross:x86_64-musl AS builder
 WORKDIR /app
-COPY --from=planner /app/recipe.json recipe.json
+#COPY --from=planner /app/recipe.json recipe.json
 #RUN cargo install cargo-chef --locked
 #RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
