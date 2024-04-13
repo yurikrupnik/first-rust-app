@@ -71,6 +71,8 @@ jobs:
           push: true
 #          tags: europe-central2-docker.pkg.dev/mussia-infra/container-repository/first-rust-app
           tags: yurikrupnik/first-rust-app
+          cache-from: type=registry,ref=user/app:buildcache
+          cache-to: type=registry,ref=user/app:buildcache,mode=max
   kaniko:
     runs-on: ubuntu-latest
     permissions:
