@@ -1,20 +1,19 @@
-FROM rust:1 AS chef
-# We only pay the installation cost once,
-# it will be cached from the second build onwards
-RUN cargo install cargo-chef
-#RUN #apk add musl-dev build-base upx
+#FROM rust:1 AS chef
+## We only pay the installation cost once,
+## it will be cached from the second build onwards
+#RUN cargo install cargo-chef
 
-WORKDIR app
+#WORKDIR app
 
-FROM chef AS planner
-COPY . .
-RUN cargo chef prepare --recipe-path recipe.json
+#FROM chef AS planner
+#COPY . .
+#RUN cargo chef prepare --recipe-path recipe.json
 
 FROM messense/rust-musl-cross:x86_64-musl AS builder
 WORKDIR /app
 COPY --from=planner /app/recipe.json recipe.json
-RUN cargo install cargo-chef --locked
-RUN cargo chef cook --release --recipe-path recipe.json
+#RUN cargo install cargo-chef --locked
+#RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release --target x86_64-unknown-linux-musl
 #RUN apt-get update && apt-get install -y upx
