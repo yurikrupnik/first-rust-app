@@ -4,6 +4,12 @@ version = "0.1.2"
 edition = "2021"
 description = "My app"
 
+[profile.release]
+opt-level = "z"
+codegen-units = 1
+strip = true
+lto = true
+
 [dependencies]
 actix-web = { version = "4.5.1", features = ["default"] }
 mongodb = "2.8"
