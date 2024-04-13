@@ -43,7 +43,7 @@ async fn mongo_connect() -> Client {
         .unwrap_or_else(|_|  "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into());
 
     println!("uri is {}", uri);
-    Client::with_uri_str(uri).await.expect("failed to connect")
+    Client::with_uri_str(uri).await.expect("failed to connect!")
 }
 
 #[get("/hello/{name}")]
@@ -55,7 +55,7 @@ async fn greet(name: web::Path<String>) -> impl Responder {
 async fn stream() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("application/json")
-        .json("Hello there")
+        .json("Hello from yuri")
 }
 
 /// Adds a new user to the "users" collection in the database.
