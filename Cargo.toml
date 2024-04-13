@@ -6,8 +6,8 @@ description = "My app"
 
 [dependencies]
 actix-web = { version = "4.5.1", features = ["default"] }
-mongodb = "2.7.1"
-serde = "1.0.197"
-ts-rs = "7.1"
-tokio = { version = "1.36.0", features = ["full"] }
+mongodb = "2.8"
+serde = "1.0"
+ts-rs = "8.1"
+tokio = { version = "1.37", features = ["full"] }
 dotenv = "0.15.0"
