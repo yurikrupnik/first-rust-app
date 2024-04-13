@@ -55,7 +55,7 @@ async fn greet(name: web::Path<String>) -> impl Responder {
 async fn stream() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("application/json")
-        .json("Hello world!!!!")
+        .json("Hello from yuri")
 }
 
 /// Adds a new user to the "users" collection in the database.
