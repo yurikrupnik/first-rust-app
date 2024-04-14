@@ -95,11 +95,11 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v1'
       - run: |-
           gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
-      - name: Kaniko build
-        uses: aevea/action-kaniko@master
-        with:
-          image: yurikrupnik/kaniko-first-rust-app
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          cache: true
+#      - name: Kaniko build
+#        uses: aevea/action-kaniko@master
+#        with:
+#          image: yurikrupnik/kaniko-first-rust-app
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+#          cache: true
 #          cache_registry: yurikrupnik/kaniko-first-rust-app-cache
