@@ -83,7 +83,7 @@ jobs:
         with:
           context: .
           push: true
-#          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=registry,ref=yurikrupnik/first-rust-app:buildcache
           cache-to: type=registry,ref=yurikrupnik/first-rust-app:buildcache,mode=max
