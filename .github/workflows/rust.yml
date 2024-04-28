@@ -87,29 +87,29 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=registry,ref=yurikrupnik/first-rust-app:buildcache
           cache-to: type=registry,ref=yurikrupnik/first-rust-app:buildcache,mode=max
-  kaniko:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: 'read'
-      id-token: 'write'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - id: 'auth'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
-      - run: |-
-          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
-      - name: Kaniko build
-        uses: aevea/action-kaniko@master
-        with:
-          image: yurikrupnik/kaniko-first-rust-app
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          cache: true
+#  kaniko:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: 'read'
+#      id-token: 'write'
+#    steps:
+#      - uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#      - id: 'auth'
+#        uses: 'google-github-actions/auth@v1'
+#        with:
+#          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+#          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
+#      - name: 'Set up Cloud SDK'
+#        uses: 'google-github-actions/setup-gcloud@v1'
+#      - run: |-
+#          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
+#      - name: Kaniko build
+#        uses: aevea/action-kaniko@master
+#        with:
+#          image: yurikrupnik/kaniko-first-rust-app
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+#          cache: true
 #          cache_registry: yurikrupnik/kaniko-first-rust-app-cache
