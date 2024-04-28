@@ -64,13 +64,27 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            yurikrupnik/first-rust-app
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=sha
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-#          tags: europe-central2-docker.pkg.dev/mussia-infra/container-repository/first-rust-app
-          tags: yurikrupnik/first-rust-app
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=registry,ref=yurikrupnik/first-rust-app:buildcache
           cache-to: type=registry,ref=yurikrupnik/first-rust-app:buildcache,mode=max
   kaniko:

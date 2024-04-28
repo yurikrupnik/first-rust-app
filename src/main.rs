@@ -1,13 +1,17 @@
+// use std::net::Ipv4Addr;
+
 mod model;
 mod status;
 #[cfg(test)]
 mod test;
+mod services;
 
 use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use actix_web::web::{scope};
 use model::User;
 use mongodb::{bson::doc, Client, Collection};
 use dotenv::{dotenv};
+use services::mongo::mongo_connect;
 
 const DB_NAME: &str = "mussia33";
 const COLL_NAME: &str = "users";
@@ -38,14 +42,6 @@ async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpRespo
     // }
 }
 
-async fn mongo_connect() -> Client {
-    let uri = std::env::var("MONGO_URI")
-        .unwrap_or_else(|_|  "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into());
-
-    println!("uri is {}", uri);
-    Client::with_uri_str(uri).await.expect("failed to connect!")
-}
-
 #[get("/hello/{name}")]
 async fn greet(name: web::Path<String>) -> impl Responder {
     format!("Hello {name}!")
@@ -62,14 +58,6 @@ async fn stream() -> HttpResponse {
 #[post("/users")]
 async fn add_user(_req: HttpRequest, client: web::Data<Client>) -> HttpResponse {
     let collection = client.database(DB_NAME).collection(COLL_NAME);
-    // println!("email {}", form.email);
-    // println!("body {}", body.email);
-    // println!("req {}", req.uri());
-    // println!("query_string {}", req.query_string());
-    // println!("method {}", req.method());
-    // HttpResponse::Ok()
-    //     .content_type("application/json")
-    //     .json("user added")
     let result = collection
         .insert_one(
             User {
