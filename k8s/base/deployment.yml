@@ -17,8 +17,9 @@ spec:
       restartPolicy: Always
       containers:
         - name: rust-app
-          image: yurikrupnik/first-rust-app:latest
-          imagePullPolicy: IfNotPresent
+          image: yurikrupnik/first-rust-app:master
+#          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "64Mi"
