@@ -21,17 +21,18 @@ pipeline:
                   identifier: dockerbuild
                   name: docker_build
                   spec:
-                    image: plugins/docker
+                    connectorRef: yuri
+                    image: yurikrupnik/first-rust-app-harnes
                     settings:
                       dry_run: "true"
-                      repo: hello/world
+                      repo: yurikrupnik/first-rust-app
                       tags: latest
                   timeout: ""
                   type: Plugin
           platform:
-            arch: Amd64
             os: Linux
+            arch: Amd64
           runtime:
-            spec: {}
             type: Cloud
+            spec: {}
         type: CI
