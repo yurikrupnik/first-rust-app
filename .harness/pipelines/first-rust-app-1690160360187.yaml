@@ -22,7 +22,7 @@ pipeline:
                   name: docker_build
                   spec:
                     connectorRef: yuri
-                    image: yurikrupnik/first-rust-app-harnes
+                    image: yurikrupnik/first-rust-app
                     settings:
                       dry_run: "true"
                       repo: yurikrupnik/first-rust-app
