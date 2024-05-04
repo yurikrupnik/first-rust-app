@@ -6,7 +6,6 @@ metadata:
     app: rust-app
 spec:
   replicas: 1
-
   template:
     metadata:
       name: rust-app
