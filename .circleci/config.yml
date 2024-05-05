@@ -7,7 +7,7 @@ caches:
 jobs:
   lint:
     docker:
-      - image: cimg/rust:1.77.2
+      - image: cimg/rust:1.78.0
     steps:
       - checkout
       - restore_cache:
@@ -20,7 +20,7 @@ jobs:
             - ~/.cargo
   test:
     docker:
-      - image: cimg/rust:1.77.2
+      - image: cimg/rust:1.78.0
     steps:
       - checkout
       - restore_cache:
@@ -33,7 +33,7 @@ jobs:
             - ~/.cargo
   build:
     docker:
-      - image: cimg/rust:1.77.2
+      - image: cimg/rust:1.78.0
     steps:
       - checkout
       - restore_cache:
@@ -52,7 +52,7 @@ jobs:
           docker_layer_caching: true
       - checkout
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - run: docker buildx build . -t yurikrupnik/ci-first-rust-app --push
+      - run: docker buildx build . -t yurikrupnik/ci-first-rust-app --platform linux/amd64,linux/arm64 --push
 workflows:
   build:
     jobs:

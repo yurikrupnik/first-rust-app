@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: rust-app
-          image: yurikrupnik/first-rust-app:latest
+          image: yurikrupnik/first-rust-app:sha-a37d4f4
           imagePullPolicy: IfNotPresent
           resources:
             requests:
