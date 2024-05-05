@@ -1,7 +1,13 @@
+.idea
+.circleci
+.github
+.harness
+bindings
+k8s
+target
 Dockerfile
 .dockerignore
 .env
 .env.example
-.idea
 .gitignore
 renovate.json
