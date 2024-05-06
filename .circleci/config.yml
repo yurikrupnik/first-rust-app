@@ -55,7 +55,7 @@ jobs:
       - run: docker buildx create --name mybuilder
       - run: docker buildx use mybuilder
       - run: docker buildx inspect --bootstrap
-      - run: docker buildx build . -t yurikrupnik/ci-first-rust-app --platform linux/amd64,linux/arm64 --push
+      - run: docker buildx build . -t yurikrupnik/ci-first-rust-app --platform linux/amd64,linux/arm64 --push --cache-from type=registry,ref=yurikrupnik/ci-first-rust-app:buildcache --cache-to type=registry,mode=max,ref=yurikrupnik/ci-first-rust-app:buildcache
 workflows:
   build:
     jobs:
