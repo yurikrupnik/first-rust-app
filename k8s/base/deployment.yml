@@ -6,7 +6,6 @@ metadata:
     app: rust-app
 spec:
   replicas: 1
-
   template:
     metadata:
       name: rust-app
@@ -17,8 +16,9 @@ spec:
       restartPolicy: Always
       containers:
         - name: rust-app
-          image: yurikrupnik/first-rust-app:latest
-          imagePullPolicy: IfNotPresent
+          image: yurikrupnik/first-rust-app:master
+#          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           resources:
             requests:
               memory: "64Mi"

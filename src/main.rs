@@ -13,7 +13,7 @@ use mongodb::{bson::doc, Client, Collection};
 use dotenv::{dotenv};
 use services::mongo::mongo_connect;
 
-const DB_NAME: &str = "mussia33";
+const DB_NAME: &str = "mussia331";
 const COLL_NAME: &str = "users";
 
 /// Gets the user with the supplied username.
