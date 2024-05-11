@@ -5,9 +5,13 @@
 bindings
 k8s
 target
-Dockerfile
 .dockerignore
 .env
 .env.example
 .gitignore
+Dockerfile
+local.Dockerfile
+Procfile
+readme.md
 renovate.json
+Tiltfile

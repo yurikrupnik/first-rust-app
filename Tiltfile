@@ -2,6 +2,7 @@
 docker_build(
   "yurikrupnik/first-rust-app",
   ".",
+  dockerfile="./local.Dockerfile",
   target="final",
 )
 

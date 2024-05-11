@@ -5,7 +5,7 @@ metadata:
   labels:
     app: rust-app
 spec:
-  replicas: 2
+  replicas: 1
 
   template:
     metadata:
@@ -17,7 +17,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: rust-app
-          image: yurikrupnik/first-rust-app:sha-a37d4f4
+          image: yurikrupnik/first-rust-app:sha-a37d4f4 #{"imagepolicy": "flux-system:rust-app"}
           imagePullPolicy: IfNotPresent
           resources:
             requests:
@@ -31,7 +31,6 @@ spec:
               value: "mongodb://host.docker.internal"
             - name: REDIS_HOST
               value: "host.docker.internal"
-
   selector:
     matchLabels:
       app: rust-app
