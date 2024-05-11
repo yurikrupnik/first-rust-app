@@ -4,6 +4,7 @@ metadata:
   name: rust-app
   labels:
     app: rust-app
+    shit: shit
 spec:
   replicas: 1
 

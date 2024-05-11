@@ -5,6 +5,7 @@ mod status;
 #[cfg(test)]
 mod test;
 mod services;
+mod shared;
 
 use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
 use actix_web::web::{scope};
@@ -44,14 +45,14 @@ async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpRespo
 
 #[get("/hello/{name}")]
 async fn greet(name: web::Path<String>) -> impl Responder {
-    format!("Hello {name}!!!")
+    format!("Hello {name}!!!!")
 }
 
 #[get("/stream")]
 async fn stream() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("application/json")
-        .json("Hello from yuri!!!")
+        .json("Hello from yuri!!")
 }
 
 /// Adds a new user to the "users" collection in the database.
