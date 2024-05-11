@@ -1,5 +1,16 @@
+FROM rust:1 AS chef
+RUN cargo install cargo-chef
+WORKDIR app
+
+FROM chef AS planner
+COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
+
 FROM messense/rust-musl-cross:x86_64-musl AS builder
 WORKDIR /app
+COPY --from=planner /app/recipe.json recipe.json
+RUN cargo install cargo-chef --locked
+RUN cargo chef cook --release --recipe-path recipe.json
 COPY . .
 RUN cargo build --release --target x86_64-unknown-linux-musl
 
