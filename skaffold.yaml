@@ -1,0 +1,45 @@
+apiVersion: skaffold/v4beta10
+kind: Config
+metadata:
+  name: first-rust-app
+build:
+  artifacts:
+    - image: yurikrupnik/first-rust-app
+      docker:
+        dockerfile: local.Dockerfile
+test:
+  - image: alpine
+    custom:
+      - command: echo this is a custom test command
+manifests:
+#  helm:
+#    releases:
+#      - name: external-secrets
+#        createNamespace: true
+#        namespace: external-secrets
+#        chartPath: external-secrets
+#        repo: https://charts.external-secrets.io
+
+  kustomize:
+    paths:
+      - k8s/base
+profiles:
+  - name: qa
+    manifests: 
+      kustomize: 
+        paths:
+          - k8s/qa
+  - name: prod
+    manifests:
+      kustomize:
+        paths:
+          - k8s/prod
+deploy:
+  kubectl:
+    remoteManifests:
+      - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+portForward:
+  - resourceName: rust-app
+    resourceType: deployment
+    port: 8080
+    localPort: 8080
