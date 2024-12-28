@@ -79,7 +79,7 @@ async fn add_user(_req: HttpRequest, client: web::Data<Client>) -> HttpResponse 
 async fn main() -> std::io::Result<()> {
     dotenv().ok();
     mongo_connect().await;
-    println!("Connected to mongo");
+    println!("Connected to mongo!");
     HttpServer::new(move || {
         App::new().service(
             scope("/api")
