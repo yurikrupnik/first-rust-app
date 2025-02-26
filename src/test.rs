@@ -20,7 +20,7 @@ async fn test() {
     client
         .database("users")
         .collection::<User>("users")
-        .drop(None)
+        .drop()
         .await
         .expect("drop collection should succeed");
 

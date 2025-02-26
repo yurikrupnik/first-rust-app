@@ -1,16 +1,16 @@
 // use std::net::Ipv4Addr;
 
 mod model;
+mod services;
 mod status;
 #[cfg(test)]
 mod test;
-mod services;
 
+use actix_web::web::scope;
 use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
-use actix_web::web::{scope};
+use dotenv::dotenv;
 use model::User;
 use mongodb::{bson::doc, Client, Collection};
-use dotenv::{dotenv};
 use services::mongo::mongo_connect;
 
 const DB_NAME: &str = "mussia33";
@@ -22,7 +22,7 @@ async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpRespo
     let search_id = id.into_inner();
     println!("id is test here {}", search_id);
     let users: Collection<User> = client.database(DB_NAME).collection(COLL_NAME);
-    let data = users.find_one(doc! { "_id": search_id }, None).await;
+    let data = users.find_one(doc! { "_id": search_id }).await;
     if data.is_ok() {
         println!("all good")
     }
@@ -51,7 +51,7 @@ async fn greet(name: web::Path<String>) -> impl Responder {
 async fn stream() -> HttpResponse {
     HttpResponse::Ok()
         .content_type("application/json")
-        .json("Hello from yuri")
+        .json("Hello from yuri!!!")
 }
 
 /// Adds a new user to the "users" collection in the database.
@@ -59,15 +59,12 @@ async fn stream() -> HttpResponse {
 async fn add_user(_req: HttpRequest, client: web::Data<Client>) -> HttpResponse {
     let collection = client.database(DB_NAME).collection(COLL_NAME);
     let result = collection
-        .insert_one(
-            User {
-                name: "test".to_string(),
-                age: 12,
-                role: "admin".to_string(),
-                email: "a@a.com".to_string(),
-            },
-            None,
-        )
+        .insert_one(User {
+            name: "test".to_string(),
+            age: 12,
+            role: "admin".to_string(),
+            email: "a@a.com".to_string(),
+        })
         .await;
     match result {
         Ok(_) => HttpResponse::Ok().json("user added"),
