@@ -67,7 +67,7 @@ async fn add_user(_req: HttpRequest, client: web::Data<Client>) -> HttpResponse 
         })
         .await;
     match result {
-        Ok(_) => HttpResponse::Ok().json("user added"),
+        Ok(_) => HttpResponse::Ok().json("user added!"),
         Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
     }
 }
