@@ -63,7 +63,7 @@ async fn add_user(_req: HttpRequest, client: web::Data<Client>) -> HttpResponse 
             name: "test".to_string(),
             age: 12,
             role: "admin".to_string(),
-            email: "a@a.com".to_string(),
+            email: "a@aa.com".to_string(),
         })
         .await;
     match result {
