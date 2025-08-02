@@ -1,0 +1,29 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker:20.10.24'
+    args: ['run', '--privileged', 'linuxkit/binfmt:v0.7']
+    id: 'initialize-qemu'
+  - name: 'gcr.io/cloud-builders/docker:20.10.24'
+    args: ['buildx', 'create', '--name', 'mybuilder']
+    id: 'create-builder'
+  - name: 'gcr.io/cloud-builders/docker:20.10.24'
+    args: ['buildx', 'use', 'mybuilder']
+    id: 'select-builder'
+  - name: 'gcr.io/cloud-builders/docker:20.10.24'
+    args: ['buildx', 'inspect', '--bootstrap']
+    id: 'show-target-build-platforms'
+  - name: 'gcr.io/cloud-builders/docker:20.10.24'
+    args: ['buildx', 'build', '--platform', '$_DOCKER_BUILDX_PLATFORMS',
+           '-t', '$_REGISTRY/$_PROJECT_ID/$_AR/$_IMAGE',
+           '--push', '.', '--cache-from', 'type=registry,ref=$_REGISTRY/$_PROJECT_ID/$_AR/$_IMAGE:buildcache',
+           '--cache-to', 'type=registry,mode=max,ref=$_REGISTRY/$_PROJECT_ID/$_AR/$_IMAGE:buildcache']
+    id: 'build-multi-architecture-container-image'
+options:
+#  machineType: 'N1_HIGHCPU_32'
+  env:
+    - 'DOCKER_CLI_EXPERIMENTAL=enabled'
+substitutions:
+  _DOCKER_BUILDX_PLATFORMS: 'linux/amd64'
+  _PROJECT_ID: 'devops-386509'
+  _AR: 'platform'
+  _IMAGE: 'test1'
+  _REGISTRY: 'me-west1-docker.pkg.dev'
