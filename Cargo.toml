@@ -11,9 +11,9 @@ strip = true
 lto = true
 
 [dependencies]
-actix-web = { version = "4.9", features = ["default"] }
+actix-web = { version = "4.11", features = ["default"] }
 mongodb = "3.2"
-serde = "1.0.218"
-ts-rs = "10.1"
-tokio = { version = "1.43", features = ["full"] }
-dotenv = "0.15.0"
+serde = "1.0"
+ts-rs = "11.0"
+tokio = { version = "1.47", features = ["full"] }
+dotenv = "0.15"
