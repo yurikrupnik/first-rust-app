@@ -52,7 +52,7 @@ jobs:
           docker_layer_caching: true
       - checkout
       - run: docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-      - run: docker buildx build . -t yurikrupnik/ci-first-rust-app --push
+      - run: docker buildx build . -t yurikrupnik/ci-first-rust-app --platform linux/amd64,linux/arm64 --push
 workflows:
   build:
     jobs:

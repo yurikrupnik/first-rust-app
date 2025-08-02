@@ -79,11 +79,11 @@ jobs:
             type=semver,pattern={{version}}
             type=sha
       - name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-#          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=registry,ref=yurikrupnik/first-rust-app:buildcache
           cache-to: type=registry,ref=yurikrupnik/first-rust-app:buildcache,mode=max
@@ -97,12 +97,12 @@ jobs:
 #        with:
 #          fetch-depth: 0
 #      - id: 'auth'
-#        uses: 'google-github-actions/auth@v1'
+#        uses: 'google-github-actions/auth@v2'
 #        with:
 #          workload_identity_provider: 'projects/922939596495/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
 #          service_account: 'container-builder-sa@mussia-infra.iam.gserviceaccount.com'
 #      - name: 'Set up Cloud SDK'
-#        uses: 'google-github-actions/setup-gcloud@v1'
+#        uses: 'google-github-actions/setup-gcloud@v2'
 #      - run: |-
 #          gcloud --quiet auth configure-docker europe-central2-docker.pkg.dev
 #      - name: Kaniko build
