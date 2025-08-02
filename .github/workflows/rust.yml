@@ -50,6 +50,10 @@ jobs:
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: |
+            network=host
+            image=moby/buildkit:buildx-stable-1
       - name: Log into registry
         uses: docker/login-action@v3
         with:
@@ -59,10 +63,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          # list of Docker images to use as base name for tags
-          images: |
-            yurikrupnik/first-rust-app
-          # generate Docker tags based on the following events/attributes
+          images: yurikrupnik/first-rust-app
           tags: |
             type=schedule
             type=ref,event=branch
@@ -76,7 +77,11 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
-          cache-from: type=registry,ref=yurikrupnik/first-rust-app:buildcache
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+          cache-from: |
+            type=registry,ref=yurikrupnik/first-rust-app:buildcache
+            type=registry,ref=yurikrupnik/first-rust-app:latest
           cache-to: type=registry,ref=yurikrupnik/first-rust-app:buildcache,mode=max
 #  kaniko:
 #    runs-on: ubuntu-latest
