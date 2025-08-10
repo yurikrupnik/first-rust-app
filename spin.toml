@@ -1,0 +1,18 @@
+spin_manifest_version = 2
+
+[application]
+name = "first-rust-app"
+version = "0.1.0"
+authors = ["Your Name <your.email@example.com>"]
+description = "A Rust HTTP API running on Spin"
+
+[[trigger.http]]
+route = "/api/..."
+component = "first-rust-app"
+
+[component.first-rust-app]
+source = "target/wasm32-wasi/release/first-rust-app.wasm"
+allowed_outbound_hosts = ["*"]
+[component.first-rust-app.build]
+command = "cargo build --target wasm32-wasi --release"
+watch = ["src/**/*.rs", "Cargo.toml"]

@@ -1,93 +1,64 @@
-// use std::net::Ipv4Addr;
-
-mod model;
-mod services;
-mod status;
-#[cfg(test)]
-mod test;
-
-use actix_web::web::scope;
-use actix_web::{get, post, web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use std::sync::Arc;
+use axum::{
+    middleware::from_fn_with_state,
+    routing::{get, post},
+    Router,
+};
 use dotenv::dotenv;
-use model::User;
-use mongodb::{bson::doc, Client, Collection};
-use services::mongo::mongo_connect;
+use tower::ServiceBuilder;
+use tower_http::cors::CorsLayer;
 
-const DB_NAME: &str = "mussia33";
-const COLL_NAME: &str = "users";
+mod auth;
+mod config;
+mod database;
+mod handlers;
+mod middleware;
+mod models;
+mod services;
+mod state;
 
-/// Gets the user with the supplied username.
-#[get("/users/{id}")]
-async fn get_user(client: web::Data<Client>, id: web::Path<String>) -> HttpResponse {
-    let search_id = id.into_inner();
-    println!("id is test here {}", search_id);
-    let users: Collection<User> = client.database(DB_NAME).collection(COLL_NAME);
-    let data = users.find_one(doc! { "_id": search_id }).await;
-    if data.is_ok() {
-        println!("all good")
-    }
-    HttpResponse::Ok()
-        .content_type("application/json")
-        .json("user added")
-    // match collection
-    //     .find_one(doc! { "_id": &search_id }, None)
-    //     // .find(doc! {}, None)
-    //     .await
-    // {
-    //     Ok(Some(user)) => HttpResponse::Ok().json(user),
-    //     Ok(None) => {
-    //         HttpResponse::NotFound().body(format!("No user found with username {search_id}"))
-    //     }
-    //     Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-    // }
-}
-
-#[get("/hello/{name}")]
-async fn greet(name: web::Path<String>) -> impl Responder {
-    format!("Hello {name}!")
-}
-
-#[get("/stream")]
-async fn stream() -> HttpResponse {
-    HttpResponse::Ok()
-        .content_type("application/json")
-        .json("Hello from yuri!!!")
-}
-
-/// Adds a new user to the "users" collection in the database.
-#[post("/users")]
-async fn add_user(_req: HttpRequest, client: web::Data<Client>) -> HttpResponse {
-    let collection = client.database(DB_NAME).collection(COLL_NAME);
-    let result = collection
-        .insert_one(User {
-            name: "test".to_string(),
-            age: 12,
-            role: "admin".to_string(),
-            email: "a@aa.com".to_string(),
-        })
-        .await;
-    match result {
-        Ok(_) => HttpResponse::Ok().json("user added!"),
-        Err(err) => HttpResponse::InternalServerError().body(err.to_string()),
-    }
-}
+use config::Config;
+use state::AppState;
 
 #[tokio::main]
-async fn main() -> std::io::Result<()> {
+async fn main() -> anyhow::Result<()> {
     dotenv().ok();
-    mongo_connect().await;
-    println!("Connected to mongo!");
-    HttpServer::new(move || {
-        App::new().service(
-            scope("/api")
-                .service(stream)
-                .service(get_user)
-                .service(status::status)
-                .service(greet)
-                .service(add_user), // .service(status), // .service(postUser)
+    tracing_subscriber::fmt::init();
+
+    let config = Config::from_env()?;
+    let state = Arc::new(AppState::new(config).await?);
+
+    let app = Router::new()
+        .route("/api/health", get(handlers::health::health_check))
+        .nest("/api/auth", auth_routes())
+        .nest("/api/users", user_routes())
+        .layer(
+            ServiceBuilder::new()
+                .layer(CorsLayer::permissive())
+                .layer(from_fn_with_state(
+                    state.clone(),
+                    crate::middleware::auth::auth_middleware,
+                )),
         )
-    })
-    .bind(("0.0.0.0", 8080))?
-    .run()
-    .await
+        .with_state(state);
+
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await?;
+    tracing::info!("Server running on http://0.0.0.0:8080");
+    
+    axum::serve(listener, app).await?;
+    Ok(())
+}
+
+fn auth_routes() -> Router<Arc<AppState>> {
+    Router::new()
+        .route("/register", post(handlers::auth::register))
+        .route("/login", post(handlers::auth::login))
+        .route("/refresh", post(handlers::auth::refresh))
+}
+
+fn user_routes() -> Router<Arc<AppState>> {
+    Router::new()
+        .route("/", get(handlers::users::get_users))
+        .route("/{id}", get(handlers::users::get_user))
+        .route("/", post(handlers::users::create_user))
 }

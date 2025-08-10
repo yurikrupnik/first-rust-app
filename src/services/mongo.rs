@@ -1,5 +1,6 @@
 use mongodb::Client;
 
+#[allow(dead_code)]
 pub async fn mongo_connect() -> Client {
     let uri = std::env::var("MONGO_URI").unwrap_or_else(|_| {
         "mongodb+srv://yurikrupnik:T4eXKj1RBI4VnszC@cluster0.rdmew.mongodb.net/".into()

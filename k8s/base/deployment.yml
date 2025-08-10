@@ -29,9 +29,9 @@ spec:
           env:
             - name: MONGO_URI
 #              value: "mongodb://host.docker.internal"
-              value: "mongodb://mongodb-service.dbs.svc.cluster.local"
+              value: "mongodb://mongodb.dbs.svc.cluster.local"
             - name: REDIS_HOST
-              value: "redis-service.dbs.svc.cluster.local"
+              value: "redis.dbs.svc.cluster.local"
 
   selector:
     matchLabels:

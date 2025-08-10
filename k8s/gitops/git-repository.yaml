@@ -1,0 +1,11 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: first-rust-app
+  namespace: aris
+spec:
+  interval: 5m0s
+  ref:
+    branch: master
+  timeout: 60s
+  url: https://github.com/yurikrupnik/first-rust-app

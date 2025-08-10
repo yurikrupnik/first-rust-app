@@ -1,0 +1,39 @@
+# Test Configuration for first-rust-app
+
+[test]
+# Database configurations for testing
+database_url = "postgres://test:test@localhost:5432/test"
+redis_url = "redis://localhost:6379"
+mongodb_url = "mongodb://admin:password123@localhost:27017"
+
+# JWT configuration for testing
+jwt_secret = "test-secret-key-change-in-production"
+jwt_expires_in = 3600
+jwt_refresh_expires_in = 604800
+
+# Server configuration
+port = 8080
+
+[test.coverage]
+# Coverage thresholds
+minimum_coverage = 80
+fail_under = 75
+
+[test.e2e]
+# E2E test configuration
+base_url = "http://localhost:8080"
+timeout = 60000
+retries = 2
+browsers = ["chromium", "firefox", "webkit"]
+
+[test.integration]
+# Integration test settings
+parallel = true
+test_timeout = 300
+setup_timeout = 120
+
+[test.performance]
+# Performance test thresholds
+max_response_time = 1000  # milliseconds
+max_memory_usage = 512    # MB
+concurrent_users = 100

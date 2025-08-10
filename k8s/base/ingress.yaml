@@ -2,7 +2,7 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
-  name: node-nest-app-gateway
+  name: api-gateway
 #  namespace: istio-system
 spec:
   selector:
@@ -24,7 +24,7 @@ spec:
   hosts:
     - "*"
   gateways:
-    - node-nest-app-gateway
+    - api-gateway
   http:
     - match:
         - uri:

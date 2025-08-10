@@ -23,7 +23,8 @@ options:
     - 'DOCKER_CLI_EXPERIMENTAL=enabled'
 substitutions:
   _DOCKER_BUILDX_PLATFORMS: 'linux/amd64'
-  _PROJECT_ID: 'devops-386509'
+  _PROJECT_ID: 'playground-447016'
   _AR: 'platform'
+  _REGION: 'me-west1'
   _IMAGE: 'test1'
-  _REGISTRY: 'me-west1-docker.pkg.dev'
+  _REGISTRY: '$_REGION-docker.pkg.dev'
