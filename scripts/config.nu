@@ -12,7 +12,12 @@ def load_kcl_config [] {
         $acc | insert $item.key $item.value
     }
 }
-
+# Load KCL configuration dynamically
+def load_kcl_config [] {
+    open $KCL_CONFIG_FILE | get kcl_options | reduce --fold {} {|item, acc|
+        $acc | insert $item.key $item.value
+    }
+}
 # Get applications from KCL config
 def get_local_applications [] {
     let config = load_kcl_config
