@@ -16,6 +16,7 @@ nuds:
     nu config.nu app list
 cluster:
     nu ~/configs-files/scripts/nx.nu
+    nu ~/configs-files/scripts/generate-shell-configs.nu
     #nu ~/configs-files/scripts/generate-shell-configs.nu
 #    gcloud auth configure-docker \
 #        me-west1-docker.pkg.dev
