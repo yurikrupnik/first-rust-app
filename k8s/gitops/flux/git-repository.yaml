@@ -1,12 +1,86 @@
-
+---
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: first-rust-app
-  namespace: aris
+  namespace: flux-system
 spec:
-  interval: 5m0s
+  interval: 1m0s
   ref:
     branch: master
   timeout: 60s
   url: https://github.com/yurikrupnik/first-rust-app
+  secretRef:
+    name: flux-system
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: first-rust-app
+  namespace: flux-system
+spec:
+  image: ghcr.io/yurikrupnik/first-rust-app
+  interval: 1m0s
+  secretRef:
+    name: ghcr-auth
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: first-rust-app
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: first-rust-app
+  policy:
+    semver:
+      range: '>=0.1.0'
+  filterTags:
+    pattern: '^master-[a-f0-9]+-(?P<ts>[0-9]+)'
+    extract: '$ts'
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta1
+kind: ImageUpdateAutomation
+metadata:
+  name: first-rust-app
+  namespace: flux-system
+spec:
+  interval: 30m
+  sourceRef:
+    kind: GitRepository
+    name: first-rust-app
+  git:
+    checkout:
+      ref:
+        branch: master
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
+      messageTemplate: |
+        Automated image update
+        
+        Automation name: {{ .AutomationObject }}
+        
+        Files:
+        {{ range $filename, $_ := .Updated.Files -}}
+        - {{ $filename }}
+        {{ end -}}
+        
+        Objects:
+        {{ range $resource, $_ := .Updated.Objects -}}
+        - {{ $resource.Kind }} {{ $resource.Name }}
+        {{ end -}}
+        
+        Images:
+        {{ range .Updated.Images -}}
+        - {{.}}
+        {{ end -}}
+    push:
+      branch: master
+  update:
+    path: ./k8s
+    strategy: Setters

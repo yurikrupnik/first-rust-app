@@ -63,6 +63,84 @@
 - `bun test:e2e` - Run Playwright e2e tests
 - `cargo tarpaulin` - Generate test coverage reports
 
+### CI/CD Pipeline
+
+#### GitHub Actions Workflows
+- **CI Pipeline** (`.github/workflows/ci.yml`):
+  - Multi-stage pipeline with test, benchmark, security, and build phases
+  - Comprehensive analysis tools: clippy, rustfmt, tarpaulin, flamegraph, cargo-audit
+  - Multi-architecture Docker builds (AMD64/ARM64)
+  - Automated manifest updates with image tags
+  - Coverage reporting with Codecov integration
+  - Artifact uploads for analysis reports and benchmarks
+
+#### Tekton Pipelines (Custom Runners)
+- **Pipeline Configuration** (`k8s/tekton/`):
+  - Custom Rust build tasks with caching
+  - Security auditing and vulnerability scanning
+  - Benchmark execution with flame graph generation
+  - GitOps integration for automated deployments
+  - Webhook integration for GitHub events
+
+#### GitOps with FluxCD
+- **Multi-Environment Deployments**:
+  - Infrastructure deployment (databases, Redis)
+  - Staging environment with health checks
+  - Production environment with dependency management
+- **Image Automation**:
+  - Automatic image updates from registry
+  - Semantic versioning support
+  - Automated commit generation
+- **Monitoring & Alerts**:
+  - Slack and GitHub notifications
+  - Multi-severity alert levels
+  - Deployment status tracking
+
+#### Version Management
+- **Semantic Versioning** (`scripts/version-manager.nu`):
+  - Automated version bumping (patch/minor/major)
+  - Git tag creation and management
+  - Kubernetes manifest updates
+  - GitHub release automation
+  - CI/CD specific versioning with timestamps
+
+### Justfile Commands
+
+#### Development
+- `just dev` - Run application in development mode
+- `just dev-watch` - Run with auto-reload
+- `just build` - Full build with analysis
+- `just test` - Run unit tests
+- `just test-e2e` - Run end-to-end tests
+
+#### Analysis & Profiling
+- `just ci-analysis` - Run all analysis tools
+- `just coverage` - Generate test coverage
+- `just flamegraph` - Generate performance flame graphs
+- `just bench` - Run benchmarks
+- `just security-audit` - Run security audits
+
+#### Version Management
+- `just version-current` - Show current version
+- `just version-bump-patch/minor/major` - Bump version
+- `just release <level>` - Complete release workflow
+
+#### Infrastructure
+- `just kind-create` - Create local Kind cluster
+- `just tekton-install` - Install Tekton pipelines
+- `just flux-install` - Install FluxCD
+- `just k8s-deploy-dev` - Deploy to Kubernetes
+
+#### CI/CD Operations
+- `just ci-full` - Complete CI analysis
+- `just docker-build-multi` - Multi-arch Docker build
+- `just flux-bootstrap` - Bootstrap GitOps
+- `just setup-cluster` - Complete cluster setup
+
+### Environment Setup
+- `just setup-dev-tools` - Install all development tools
+- `just setup-cluster` - Create and configure local cluster
+
 ### Known Issues & Fixes Applied
 - Fixed bcrypt password length limit (72 bytes) in long password tests
 - Fixed bearer token extraction test expectations for empty tokens

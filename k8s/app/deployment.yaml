@@ -1,22 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rust-app
+  name: first-rust-app
   namespace: default
+  labels:
+    app.kubernetes.io/name: first-rust-app
+    app.kubernetes.io/version: ${VERSION:=latest}
+    environment: ${ENVIRONMENT:=development}
 spec:
-  replicas: 3
+  replicas: ${REPLICA_COUNT:=3}
   selector:
     matchLabels:
-      app: rust-app
+      app: first-rust-app
   template:
     metadata:
       labels:
-        app: rust-app
+        app: first-rust-app
+        app.kubernetes.io/name: first-rust-app
+        app.kubernetes.io/version: ${VERSION:=latest}
     spec:
       containers:
-      - name: rust-app
-        image: first-rust-app:latest
-        imagePullPolicy: IfNotPresent
+      - name: first-rust-app
+        image: ghcr.io/yurikrupnik/first-rust-app:latest # {"$imagepolicy": "flux-system:first-rust-app"}
+        imagePullPolicy: Always
         ports:
         - containerPort: 8080
         env:
@@ -58,11 +64,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: rust-app
+  name: first-rust-app
   namespace: default
+  labels:
+    app.kubernetes.io/name: first-rust-app
 spec:
   selector:
-    app: rust-app
+    app: first-rust-app
   ports:
     - protocol: TCP
       port: 8080
@@ -73,19 +81,26 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: rust-app
+  name: first-rust-app
   namespace: default
+  labels:
+    app.kubernetes.io/name: first-rust-app
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  tls:
+    - hosts:
+        - first-rust-app-${ENVIRONMENT:=dev}.local
+      secretName: first-rust-app-tls
   rules:
-  - host: rust-app.local
+  - host: first-rust-app-${ENVIRONMENT:=dev}.local
     http:
       paths:
-      - path: /api
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: rust-app
+            name: first-rust-app
             port:
               number: 8080

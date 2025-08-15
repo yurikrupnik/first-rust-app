@@ -20,7 +20,7 @@ def "local create tiltfile" [
     _port: number = 8080
     --image: string = "$_host/$app $_app"
     --port: string = "5454:8080"
-    --resource-name: string = "rust-app"
+    --resource-name: string = "$_app"
     --kustomize-path: string = "k8s/base"
     --force (-f)
 ] {

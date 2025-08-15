@@ -1,15 +1,78 @@
+---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: first-rust-app
-  namespace: aris
+  name: first-rust-app-infra
+  namespace: flux-system
 spec:
   interval: 5m0s
-  dependsOn: []
-  path: k8s/base
+  path: ./k8s/db
   prune: true
-  targetNamespace: aris
   sourceRef:
     kind: GitRepository
     name: first-rust-app
-    namespace: aris
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: postgres
+      namespace: default
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: redis
+      namespace: default
+  timeout: 10m
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: first-rust-app-staging
+  namespace: flux-system
+spec:
+  interval: 2m0s
+  dependsOn:
+    - name: first-rust-app-infra
+  path: ./k8s/app
+  prune: true
+  targetNamespace: staging
+  sourceRef:
+    kind: GitRepository
+    name: first-rust-app
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: first-rust-app
+      namespace: staging
+  timeout: 5m
+  postBuild:
+    substitute:
+      ENVIRONMENT: staging
+      REPLICA_COUNT: "2"
+
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: first-rust-app-production
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+    - name: first-rust-app-staging
+  path: ./k8s/app
+  prune: true
+  targetNamespace: production
+  sourceRef:
+    kind: GitRepository
+    name: first-rust-app
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: first-rust-app
+      namespace: production
+  timeout: 10m
+  postBuild:
+    substitute:
+      ENVIRONMENT: production
+      REPLICA_COUNT: "5"
+  suspend: false
